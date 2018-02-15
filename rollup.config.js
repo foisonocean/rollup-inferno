@@ -1,12 +1,21 @@
-import resolve from 'rollup-plugin-node-resolve';
+import { readFile, writeFileSync } from 'fs';
+import { resolve } from 'path';
+
+import nodeResolve from 'rollup-plugin-node-resolve';
 import replace from 'rollup-plugin-replace';
 import typescript from 'rollup-plugin-typescript2';
 import babel from 'rollup-plugin-babel';
+import serve from 'rollup-plugin-serve';
+import livereload from 'rollup-plugin-livereload';
+import uglify from 'rollup-plugin-uglify';
+import hash from 'rollup-plugin-hash';
+import mkdirp from 'mkdirp';
+import chokidar from 'chokidar';
 
 const config =  {
 	input: 'src/index.tsx',
 	plugins: [
-		resolve({
+		nodeResolve({
 			jsnext: true,
       		modulesOnly: true,
 		}),
@@ -21,9 +30,81 @@ const config =  {
 		})
 	],
 	output: {
-		file: 'dist/app.js',
+		file: 'dist/js/app.js',
 		format: 'iife'
 	}
 };
+
+if (process.env.NODE_ENV !== 'production') {
+	// watch and copy html file
+	copyHtml('/js/app.js');
+	chokidar.watch(resolve(__dirname, './src/index.html'), {
+		persistent: true
+	})
+		.on('change', () => {
+			copyHtml('/js/app.js')
+		});
+
+	config.plugins.push(
+		serve({
+			verbose: false,
+			contentBase: 'dist',
+			historyApiFallback: true,
+			host: '0.0.0.0',
+			port: 3000,
+			headers: {
+				'Access-Control-Allow-Origin': '*'
+			}
+		}),
+		livereload({
+			watch: 'dist'
+		})
+	);
+} else {
+	config.plugins.push(
+		uglify(),
+		hash({
+			dest: 'dist/js/app.[hash:8].js',
+			replace: true,
+			callback: filepath => {
+				let filename = filepath.split('/')
+				filename = filename[filename.length - 1]
+				copyHtml(`/js/${filename}`);
+			}
+		})
+	);
+}
+
+function copyHtml (entyrPath) {
+	readFile(
+		resolve(__dirname, './src/index.html'),
+		{
+			encoding: 'utf-8'
+		},
+		(err, html) => {
+			if (err) {
+				console.error(err);
+				throw err;
+			} else {
+				const replacedHtmlContent = html.replace('%js-entry-path%', entyrPath);
+				mkdirp(resolve(__dirname, './dist'), error => {
+					if (error) {
+						console.error(error)
+						throw error
+					} else {
+						writeFileSync(
+							resolve(__dirname, './dist/index.html'),
+							replacedHtmlContent,
+							{
+								encoding: 'utf-8',
+								flag: 'w'
+							}
+						)
+					}
+				});
+			}
+		}
+	);
+}
 
 export default config;
