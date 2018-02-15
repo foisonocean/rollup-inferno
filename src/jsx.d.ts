@@ -8,11 +8,11 @@ import { VNode } from 'inferno';
 interface InfernoJSXElement<P> extends VNode {}
 
 declare global {
-	namespace JSX {
-		interface Element extends InfernoJSXElement<any> {}
+  namespace JSX {
+    interface Element extends InfernoJSXElement<any> {}
 
-		interface IntrinsicElements {
-			[elementName: string]: any;
-		}
-	}
+    interface IntrinsicElements {
+      [elementName: string]: any;
+    }
+  }
 }

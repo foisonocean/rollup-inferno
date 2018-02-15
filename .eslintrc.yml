@@ -1,0 +1,14 @@
+env:
+  browser: true
+  es6: true
+  node: true
+parser: typescript-eslint-parser
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  sourceType: module
+extends:
+  - airbnb-base
+  - plugin:promise/recommended
+plugins:
+  - promise

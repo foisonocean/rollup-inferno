@@ -1,7 +1,8 @@
 {
   "name": "rollup-inferno",
   "version": "0.0.1",
-  "description": "A boilerplate to build a Inferno.js app with TypeScript and Rollup.",
+  "description":
+    "A boilerplate to build a Inferno.js app with TypeScript and Rollup.",
   "repository": "https://github.com/foisonocean/rollup-inferno.git",
   "author": "foisonocean <foisonocean@gmail.com>",
   "license": "MIT",
@@ -11,7 +12,12 @@
     "clean": "rimraf .typescript-compile-cache dist",
     "dev": "cross-env NODE_ENV=development rollup -w -c",
     "build": "run-s clean build:rollup",
-    "build:rollup": "cross-env NODE_ENV=production rollup -c"
+    "build:rollup": "cross-env NODE_ENV=production rollup -c",
+    "lint": "run-p lint:ts",
+    "lint:ts": "eslint \"**/*.@(js|jsx|ts|tsx)\"",
+    "format": "run-p format:ts format:others",
+    "format:ts": "prettier-eslint --write \"**/*.@(js|jsx|ts|tsx)\"",
+    "format:others": "prettier --write \"**/*.@(json|gql|graphql)\""
   },
   "dependencies": {
     "inferno": "^4.0.3"
@@ -22,8 +28,14 @@
     "babel-plugin-inferno": "^4.0.0",
     "chokidar": "^2.0.2",
     "cross-env": "^5.1.3",
+    "eslint": "^4.17.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-promise": "^3.6.0",
     "mkdirp": "^0.5.1",
     "npm-run-all": "^4.1.2",
+    "prettier": "^1.10.2",
+    "prettier-eslint-cli": "^4.7.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.55.5",
     "rollup-plugin-babel": "^3.0.3",
@@ -35,6 +47,7 @@
     "rollup-plugin-typescript2": "^0.11.1",
     "rollup-plugin-uglify": "^3.0.0",
     "tslib": "^1.9.0",
-    "typescript": "^2.7.1"
+    "typescript": "^2.7.1",
+    "typescript-eslint-parser": "^13.0.0"
   }
 }
