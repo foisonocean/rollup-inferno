@@ -3,6 +3,8 @@
  * https://github.com/infernojs/inferno/issues/686
  */
 
+/* eslint-disable no-undef */
+
 import { VNode } from 'inferno';
 
 interface InfernoJSXElement<P> extends VNode {}

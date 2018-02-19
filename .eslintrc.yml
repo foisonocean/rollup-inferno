@@ -10,5 +10,35 @@ parserOptions:
 extends:
   - airbnb-base
   - plugin:promise/recommended
+  - plugin:inferno/recommended
+  - plugin:jsx-a11y/recommended
 plugins:
   - promise
+  - inferno
+  - jsx-a11y
+rules:
+  import/prefer-default-export: false
+  import/no-extraneous-dependencies:
+    - error
+    - packageDir:
+      - "./src"
+  import/extensions:
+    - error
+    - aways
+    -
+      js: never
+      ts: never
+      tsx: never
+settings:
+  import/resolver:
+    node:
+      extensions:
+        - .js
+        - .json
+        - .ts
+        - .tsx
+      moduleDirectory:
+        - node_modules
+        - src
+  import/parsers:
+    typescript-eslint-parser: [ .ts, .tsx ]

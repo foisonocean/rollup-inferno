@@ -12,6 +12,32 @@ import hash from 'rollup-plugin-hash';
 import mkdirp from 'mkdirp';
 import chokidar from 'chokidar';
 
+function copyHtml(entyrPath) {
+  readFile(
+    resolve(__dirname, './src/index.html'),
+    {
+      encoding: 'utf-8',
+    },
+    (err, html) => {
+      if (err) {
+        throw err;
+      } else {
+        const replacedHtmlContent = html.replace('%js-entry-path%', entyrPath);
+        mkdirp(resolve(__dirname, './dist'), (error) => {
+          if (error) {
+            throw error;
+          } else {
+            writeFileSync(resolve(__dirname, './dist/index.html'), replacedHtmlContent, {
+              encoding: 'utf-8',
+              flag: 'w',
+            });
+          }
+        });
+      }
+    },
+  );
+}
+
 const config = {
   input: 'src/index.tsx',
   plugins: [
@@ -73,34 +99,6 @@ if (process.env.NODE_ENV !== 'production') {
         copyHtml(`/js/${filename}`);
       },
     }),
-  );
-}
-
-function copyHtml(entyrPath) {
-  readFile(
-    resolve(__dirname, './src/index.html'),
-    {
-      encoding: 'utf-8',
-    },
-    (err, html) => {
-      if (err) {
-        console.error(err);
-        throw err;
-      } else {
-        const replacedHtmlContent = html.replace('%js-entry-path%', entyrPath);
-        mkdirp(resolve(__dirname, './dist'), (error) => {
-          if (error) {
-            console.error(error);
-            throw error;
-          } else {
-            writeFileSync(resolve(__dirname, './dist/index.html'), replacedHtmlContent, {
-              encoding: 'utf-8',
-              flag: 'w',
-            });
-          }
-        });
-      }
-    },
   );
 }
 
