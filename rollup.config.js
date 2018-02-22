@@ -2,6 +2,7 @@ import { readFile, writeFileSync } from 'fs';
 import { resolve } from 'path';
 
 import nodeResolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
 import replace from 'rollup-plugin-replace';
 import typescript from 'rollup-plugin-typescript2';
 import babel from 'rollup-plugin-babel';
@@ -43,7 +44,10 @@ const config = {
   plugins: [
     nodeResolve({
       jsnext: true,
-      modulesOnly: true,
+      main: true,
+    }),
+    commonjs({
+      include: 'node_modules/**',
     }),
     replace({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
