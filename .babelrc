@@ -1,6 +1,17 @@
 {
-	"plugins": [
-		["babel-plugin-inferno", {"imports": true}],
-		"external-helpers"
-	]
+  "env": {
+    "production": {
+      "plugins": [
+        ["emotion", { "hoist": true }],
+        ["babel-plugin-inferno", {"imports": true}],
+		    "external-helpers"
+      ]
+    },
+    "development": {
+      "plugins": [
+        ["emotion", { "sourceMap": true, "autoLabel": true }],
+        ["babel-plugin-inferno", {"imports": true}]
+      ]
+    }
+  }
 }
