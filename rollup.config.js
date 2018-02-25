@@ -13,6 +13,8 @@ import hash from 'rollup-plugin-hash';
 import mkdirp from 'mkdirp';
 import chokidar from 'chokidar';
 
+const isProd = process.env.NODE_ENV === 'production';
+
 function copyHtml(entyrPath) {
   readFile(
     resolve(__dirname, './src/index.html'),
@@ -45,6 +47,20 @@ const config = {
     nodeResolve({
       jsnext: true,
       main: true,
+      customResolveOptions: {
+        packageFilter(pkg) {
+          /* eslint-disable no-param-reassign */
+          if (!isProd && pkg['dev:module'] != null) {
+            pkg.main = pkg['dev:module'];
+          } else if (pkg.module != null) {
+            pkg.main = pkg.module;
+          } else if (pkg['js:next'] != null) {
+            pkg.main = pkg['js:next'];
+          }
+          return pkg;
+          /* eslint-enable no-param-reassign */
+        },
+      },
     }),
     commonjs({
       include: 'node_modules/**',
@@ -65,7 +81,7 @@ const config = {
   },
 };
 
-if (process.env.NODE_ENV !== 'production') {
+if (!isProd) {
   // watch and copy html file
   copyHtml('/js/app.js');
   chokidar
