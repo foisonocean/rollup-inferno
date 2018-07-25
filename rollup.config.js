@@ -8,7 +8,7 @@ import typescript from 'rollup-plugin-typescript2';
 import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve';
 import livereload from 'rollup-plugin-livereload';
-import uglify from 'rollup-plugin-uglify';
+import { uglify } from 'rollup-plugin-uglify';
 import hash from 'rollup-plugin-hash';
 import mkdirp from 'mkdirp';
 import chokidar from 'chokidar';
