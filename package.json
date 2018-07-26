@@ -16,7 +16,7 @@
     "lint:ts": "eslint \"**/*.@(js|jsx|ts|tsx)\"",
     "format": "run-p format:ts format:others",
     "format:ts": "prettier-eslint --write \"**/*.@(js|jsx|ts|tsx)\"",
-    "format:others": "prettier --write \"**/*.@(json|gql|graphql)\"",
+    "format:others": "prettier --write \"**/*.@(json|md|gql|graphql)\"",
     "precommit": "lint-staged",
     "prepush": "run-s lint"
   },
@@ -25,7 +25,7 @@
       "prettier-eslint --write",
       "git add"
     ],
-    "**/*.@(json|gql|graphql)": [
+    "**/*.@(json|md|gql|graphql)": [
       "prettier --write",
       "git add"
     ]
@@ -35,7 +35,8 @@
     "create-emotion-styled": "^9.2.6",
     "emotion": "^9.2.6",
     "inferno": "^5.3.0",
-    "inferno-create-element": "^5.3.0"
+    "inferno-create-element": "^5.3.0",
+    "inferno-devtools": "^5.3.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -49,8 +50,8 @@
     "eslint-plugin-inferno": "^7.8.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-typescript": "^0.12.0",
     "husky": "^0.14.3",
-    "inferno-devtools": "^5.3.0",
     "lint-staged": "^7.2.0",
     "mkdirp": "^0.5.1",
     "npm-run-all": "^4.1.3",

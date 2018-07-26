@@ -16,12 +16,9 @@ plugins:
   - promise
   - inferno
   - jsx-a11y
+  - typescript
 rules:
   import/prefer-default-export: false
-  import/no-extraneous-dependencies:
-    - error
-    - packageDir:
-      - "./src"
   import/extensions:
     - error
     - aways
