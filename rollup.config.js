@@ -5,6 +5,7 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import replace from 'rollup-plugin-replace';
 import typescript from 'rollup-plugin-typescript2';
+import transformInferno from 'ts-transform-inferno';
 import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve';
 import livereload from 'rollup-plugin-livereload';
@@ -41,6 +42,11 @@ function copyHtml(entyrPath) {
   );
 }
 
+const tsTransformer = () => ({
+  before: [transformInferno()],
+  after: [],
+});
+
 const config = {
   input: 'src/index.tsx',
   plugins: [
@@ -70,6 +76,7 @@ const config = {
     }),
     typescript({
       cacheRoot: './.typescript-compile-cache',
+      transformers: [tsTransformer],
     }),
     babel({
       exclude: 'node_modules/**',
