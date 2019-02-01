@@ -18,36 +18,32 @@ module.exports = function getBabelConfig(api) {
   ];
 
   if (isProd) {
-    presets.push([
-      '@babel/preset-env',
-      {
-        modules: false,
-        loose: true,
-        useBuiltIns: 'usage',
-        exclude: ['transform-regenerator', 'transform-async-to-generator'],
-      },
-    ]);
-    plugins.push(
-      ['emotion', { hoist: true, instances: ['emotion', 'utils/styled'] }],
+    presets.push(
       [
-        'module:fast-async',
+        '@emotion/babel-preset-css-prop',
         {
-          compiler: {
-            promises: true,
-            generators: false,
-          },
-          runtimePattern: null,
-          useRuntimeModule: false,
+          autoLabel: false,
+        },
+      ],
+      [
+        '@babel/preset-env',
+        {
+          modules: false,
+          loose: true,
+          useBuiltIns: 'usage',
+          exclude: ['transform-regenerator', 'transform-async-to-generator'],
         },
       ],
     );
+    plugins.push(
+      ['emotion', { hoist: true, instances: ['emotion', 'utils/styled'] }],
+    );
   } else {
-    plugins.push([
-      'emotion',
+    presets.push([
+      '@emotion/babel-preset-css-prop',
       {
         sourceMap: true,
         autoLabel: true,
-        instances: ['emotion', 'utils/styled'],
       },
     ]);
   }
