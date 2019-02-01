@@ -4,17 +4,18 @@ import { resolve } from 'path';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import replace from 'rollup-plugin-replace';
-import typescript from 'rollup-plugin-typescript2';
-import transformInferno from 'ts-transform-inferno';
+import includePaths from 'rollup-plugin-includepaths';
 import babel from 'rollup-plugin-babel';
 import serve from 'rollup-plugin-serve';
 import livereload from 'rollup-plugin-livereload';
-import { uglify } from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
 import hash from 'rollup-plugin-hash';
 import mkdirp from 'mkdirp';
 import chokidar from 'chokidar';
 
 const isProd = process.env.NODE_ENV === 'production';
+
+const extensions = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.json'];
 
 function copyHtml(entyrPath) {
   readFile(
@@ -42,17 +43,13 @@ function copyHtml(entyrPath) {
   );
 }
 
-const tsTransformer = () => ({
-  before: [transformInferno()],
-  after: [],
-});
-
 const config = {
   input: 'src/index.tsx',
   plugins: [
     nodeResolve({
       jsnext: true,
       main: true,
+      extensions,
       customResolveOptions: {
         packageFilter(pkg) {
           /* eslint-disable no-param-reassign */
@@ -69,17 +66,20 @@ const config = {
       },
     }),
     commonjs({
+      extensions,
       include: 'node_modules/**',
-    }),
-    replace({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
-    }),
-    typescript({
-      cacheRoot: './.typescript-compile-cache',
-      transformers: [tsTransformer],
     }),
     babel({
       exclude: 'node_modules/**',
+      extensions,
+      runtimeHelpers: true,
+    }),
+    includePaths({
+      extensions,
+      paths: [resolve(__dirname, './src')],
+    }),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
     }),
   ],
   output: {
@@ -116,7 +116,7 @@ if (!isProd) {
   );
 } else {
   config.plugins.push(
-    uglify(),
+    terser(),
     hash({
       dest: 'dist/js/app.[hash:8].js',
       replace: true,
