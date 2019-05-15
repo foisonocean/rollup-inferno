@@ -22,6 +22,7 @@ module.exports = function getBabelConfig(api) {
       [
         '@emotion/babel-preset-css-prop',
         {
+          sourceMap: false,
           autoLabel: false,
         },
       ],
@@ -34,9 +35,6 @@ module.exports = function getBabelConfig(api) {
           exclude: ['transform-regenerator', 'transform-async-to-generator'],
         },
       ],
-    );
-    plugins.push(
-      ['emotion', { hoist: true, instances: ['emotion', 'utils/styled'] }],
     );
   } else {
     presets.push([

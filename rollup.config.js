@@ -47,23 +47,7 @@ const config = {
   input: 'src/index.tsx',
   plugins: [
     nodeResolve({
-      jsnext: true,
-      main: true,
-      extensions,
-      customResolveOptions: {
-        packageFilter(pkg) {
-          /* eslint-disable no-param-reassign */
-          if (!isProd && pkg['dev:module'] != null) {
-            pkg.main = pkg['dev:module'];
-          } else if (pkg.module != null) {
-            pkg.main = pkg.module;
-          } else if (pkg['js:next'] != null) {
-            pkg.main = pkg['js:next'];
-          }
-          return pkg;
-          /* eslint-enable no-param-reassign */
-        },
-      },
+      mainFields: isProd ? undefined : ['dev:module', 'module', 'main'],
     }),
     commonjs({
       extensions,
